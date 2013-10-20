@@ -1,0 +1,324 @@
+<html>
+<head>
+<title>The Schedule</title>
+<link rel="stylesheet" type="text/css" href="/static/schedule.css"/>
+</head>
+<body>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36111761-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<script language="javascript"> 
+    function toggle(showHideDiv, days, switchTextDiv,usercourseid) {
+        var i;
+        
+        
+        var xmlhttp2;
+        var response;
+        if (window.XMLHttpRequest)
+          {// code for IE7+, Firefox, Chrome, Opera, Safari
+          xmlhttp2=new XMLHttpRequest();
+          }
+        else
+          {// code for IE6, IE5
+          xmlhttp2=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+        xmlhttp2.open("GET","/display?infor="+usercourseid,true);
+        xmlhttp2.send();
+        
+        xmlhttp2.onreadystatechange=function()
+          {
+          if (xmlhttp2.readyState==4 && xmlhttp2.status==200)
+            {
+            response = xmlhttp2.responseText;
+            for (i=0;i<days.length;i++){
+            showHide = showHideDiv + days.charAt(i);
+            var ele = document.getElementById(showHide);
+            var text = document.getElementById(switchTextDiv);
+            
+            
+                if(response == "hidden") {
+                    ele.style.display = "none";
+                    text.innerHTML = "show";
+                }
+                else {
+                    ele.style.display = "block";
+                    text.innerHTML = "hide";
+                }
+            }
+            }
+        }
+        
+        /*
+        response = xmlhttp2.responseText;
+        //document.write(xmlhttp2.responseText);
+        //document.write(response);
+        for (i=0;i<days.length;i++){
+            showHide = showHideDiv + days.charAt(i);
+            var ele = document.getElementById(showHide);
+            var text = document.getElementById(switchTextDiv);
+            
+            
+                if(response == "hidden") {
+                    ele.style.display = "none";
+                    text.innerHTML = "show";
+                }
+                else {
+                    ele.style.display = "block";
+                    text.innerHTML = "hide";
+                }
+            }
+            */
+    }
+    
+    
+    function toggle_show(showHideDiv, days, switchTextDiv,usercourseid) {
+        var i;
+        
+        var xmlhttp3;
+        var response;
+        if (window.XMLHttpRequest)
+          {// code for IE7+, Firefox, Chrome, Opera, Safari
+          xmlhttp3=new XMLHttpRequest();
+          }
+        else
+          {// code for IE6, IE5
+          xmlhttp3=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+        xmlhttp3.open("GET","/showdisplay?infor="+usercourseid,true);
+        xmlhttp3.send();
+        
+        xmlhttp3.onreadystatechange=function()
+          {
+          if (xmlhttp3.readyState==4 && xmlhttp3.status==200)
+            {
+            response = xmlhttp3.responseText;
+            for (i=0;i<days.length;i++){
+            showHide = showHideDiv + days.charAt(i);
+            var ele = document.getElementById(showHide);
+            var text = document.getElementById(switchTextDiv);
+            
+            
+                if(response == "hidden") {
+                    ele.style.display = "none";
+                    text.innerHTML = "show";
+                }
+                else {
+                    ele.style.display = "block";
+                    text.innerHTML = "hide";
+                }
+            }
+            }
+        }
+    }
+    
+    
+    
+    
+////////////////////////////////////////////////////////////////////////////////
+    function $(id){
+      return document.getElementById(id);
+    }
+    
+    function changeInfo(courseIn){
+        {% for course in account.courses %}
+            if (courseIn=='{{course.course.code}}{{course.course.section}}') {
+                    $('course_info').innerHTML = "<center><b>{{course.course.name}}</b></center></br><b>Code:</b> {{course.course.code}} </br> <b>Section:</b> {{course.course.section}} <b>Credits:</b> {{course.course.credit}}</br><b>Instructor: </b>{{course.course.instructor}}<b></br>Meeting Time:</b> {{course.course.schedule}}</br><b>Location:</b> {{course.course.location}}</br><b><a href={{course.course.url}}>Link to course page</a> </b></br><b>Description: </b></br>{{course.course.des}}";
+            }
+        {% endfor %}
+    }
+    
+    function add_remove_course(div_id,school,code,section){
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+          {// code for IE7+, Firefox, Chrome, Opera, Safari
+          xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {// code for IE6, IE5
+          xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+        var test="test";
+        xmlhttp.open("GET","/rpc?infor="+div_id+"&school="+school+"&code="+code+"&section="+section,true);
+        xmlhttp.send();
+        //xmlhttp.send("infor=test");
+        xmlhttp.onreadystatechange=function()
+          {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+            button = document.getElementById(div_id);
+            button.value = xmlhttp.responseText;
+            //document.write("olala go inside");
+            }
+          }
+    }
+    
+    function add_remove_course_show(div_id,school,code,section){
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+          {// code for IE7+, Firefox, Chrome, Opera, Safari
+          xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {// code for IE6, IE5
+          xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+        var test="test";
+        xmlhttp.open("GET","/srpc?infor="+div_id+"&school="+school+"&code="+code+"&section="+section,true);
+        xmlhttp.send();
+        //xmlhttp.send("infor=test");
+        xmlhttp.onreadystatechange=function()
+          {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+            button = document.getElementById(div_id);
+            button.value = xmlhttp.responseText;
+            //document.write("olala go inside");
+            }
+          }
+    }
+
+</script>
+
+<script type="text/javascript">
+
+</script>
+<center><h1>Personal Schedule</h1></center>
+
+<div id="schedulesqqq"><a href="/schedule">My courses</a></div>
+<div id="scheduleqqq"><a href="/feedback">Feedback</a></div>
+<div id="schedule1qqq"><a href={{logout_link}}>Log Out</a></div>
+<div id="schedulehqqq"><a href="/">Home</a></div>
+
+<div style="position:absolute; left: 8%; font-size:18px; top: 8%; color:FF0033;"><b>My courses list</b></div>
+<div id="course_list">
+{% for course in account.courses %}
+<script type="text/javascript">
+    //toogle for display course in the schedule
+    var days = '';
+    {% for time in course.course.time %}
+        days = days+'{{time.day}}';
+    {% endfor %}
+    
+    toggle_show('{{course.course.school}}{{course.course.code}}{{course.course.section}}',days,'displaytext{{course.course.school}}{{course.course.code}}{{course.course.section}}','{{account.id}}{{course.course.school}}{{course.course.code}}{{course.course.section}}');
+    document.write("<a id=\"displaytext{{course.course.school}}{{course.course.code}}{{course.course.section}}\" href=\"javascript:toggle('{{course.course.school}}{{course.course.code}}{{course.course.section}}','"+days+"','displaytext{{course.course.school}}{{course.course.code}}{{course.course.section}}','{{account.id}}{{course.course.school}}{{course.course.code}}{{course.course.section}}'); \">show</a>");
+    //document.write("<a id=\"displaytext{{course.course.name}}{{course.course.code}}{{course.course.section}}\" href=\"javascript:toggle('{{course.course.name}}{{course.course.code}}{{course.course.section}}','"+days+"','displaytext{{course.course.name}}{{course.course.code}}{{course.course.section}}','{{account.id}}{{course.course.name}}{{course.course.code}}{{course.course.section}}'); style=\"font-family: Arial, Helvetica, sans-serif;font-size: 14px;color: #ffffff;padding: 10px 15px;background: -moz-linear-gradient(top,#fff3db 0%,#ffc821 25%,#ff3c00);background: -webkit-gradient(linear, left top, left bottom,from(#fff3db),color-stop(0.25, #ffc821),to(#ff3c00));-moz-border-radius: 30px;-webkit-border-radius: 30px;border-radius: 30px;border: 1px solid #b85f00;-moz-box-shadow:0px 1px 3px rgba(000,000,000,1),inset 0px -1px 0px rgba(255,255,255,0.7);-webkit-box-shadow:0px 1px 3px rgba(000,000,000,1),inset 0px -1px 0px rgba(255,255,255,0.7);box-shadow:0px 1px 3px rgba(000,000,000,1),inset 0px -1px 0px rgba(255,255,255,0.7);text-shadow:0px -1px 1px rgba(000,000,000,0.2),0px 1px 0px rgba(255,255,255,0.3); \"\">show</a>");
+    
+    
+    // toogle to add/remove course from the list
+    add_remove_course_show('{{account.id}}{{course.course.school}}{{course.course.code}}{{course.course.section}}','{{course.course.school}}','{{course.course.code}}','{{course.course.section}}');
+</script>
+    <li>
+    <div id="courseid" onclick="changeInfo('{{course.course.code}}{{course.course.section}}')"><input id="{{account.id}}{{course.course.school}}{{course.course.code}}{{course.course.section}}" type="button" onclick="add_remove_course('{{account.id}}{{course.course.school}}{{course.course.code}}{{course.course.section}}','{{course.course.school}}','{{course.course.code}}','{{course.course.section}}')" value="add" />{{course.course.name}}</div>
+    </li>
+{% endfor %}
+
+
+</div>
+
+<div id="course_info" style="display:block;">
+
+</div>
+
+<div id="schedule1">
+<table id="month1">
+<thead>
+<tr>
+<th class="nothing">&nbsp;</th>
+<th>Monday</th>
+<th>Tuesday</th>
+<th>Wednesday</th>
+<th>Thursday</th>
+<th>Friday</th>
+<th class="weekend">Saturday</th>
+<th class="weekend">Sunday</th>
+</tr>
+</thead>
+</table>
+</div>
+
+
+<div id="schedule">
+
+<table id="month">
+<tbody>
+
+<script type="text/javascript">
+/*
+var timeStart,timeEnd,day;
+timeStart = 0;
+timeEnd = 70;
+day=52+92.5*0;
+document.write("<div id=\"courseCode\" style=\"top:"+timeStart+"px; left:"+day+"px; width:92px; height:"+timeEnd+"px; background-color:yellow; position:absolute;\">");
+document.write("courseTest");
+document.write("</div>");
+*/
+var blockH = 70;
+var blockW = 92.5;
+var indent = 52;
+function randomCol(){
+    var choice = Math.floor((Math.random()*6)+1);
+    switch (choice){
+    case 1: return "#66FFFF";
+    case 2: return "#99FF33";
+    case 3: return "#FF0066";
+    case 4: return "#FFFF99";
+    case 5: return "#FF66FF";
+    case 6: return "#8DC7BB";
+    }
+}
+
+{% for course in account.courses %}
+    var colors = randomCol();
+    {% for time in course.course.time %}
+        document.write("<div id=\"{{course.course.school}}{{course.course.code}}{{course.course.section}}{{time.day}}\" style=\"overflow:auto; opacity:0.8; border-radius: 10px; top:"+(blockH*({{time.start}}-8))+"px; left:"+(indent+blockW*({{time.day}}-2))+"px; width:92px; height:"+(blockH*({{time.end}}-{{time.start}}))+"px; background-color:"+colors+"; position:absolute;\">");
+        document.write("<center>{{course.course.name}}</center>");
+        document.write("</div>");
+    {% endfor %}
+{% endfor %}
+</script>
+
+
+<script type="text/javascript">
+var i,j;
+for (i=0;i<14;i++){
+document.write("<tr>");
+if (i<4) {
+document.write("<th class=\"nothing\">"+(i+8)+"am</th>");
+}
+if (i==4) {
+document.write("<th class=\"nothing\">"+(i+8)+"pm</th>");
+}
+if (i>4) {
+document.write("<th class=\"nothing\">"+(i-4)+"pm</th>");
+}
+for (j=0;j<7;j++){
+document.write("<th>&nbsp;</th>");
+}
+document.write("</tr>");
+}
+</script>
+</tbody>
+
+</table>
+
+</div>
+
+<div id="footer" style="position:absolute; top:93%; left:40%;">Created By Thanh Nguyen 2012. All Rights Reserved.</div>
+
+</body>
+</html>
+
+
+

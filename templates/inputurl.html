@@ -1,0 +1,15 @@
+<html>
+<head>
+<title> The input data page </title>
+</head>
+<body>
+<h1> Input the information of a course </h1>
+<form method="POST" action="/URLFetch">
+<input type="text" name="url"/>
+<input type="submit" value="submit"/>
+</form>
+{% for course in courses %}
+{{course.name}}: {{course.des}}</br>
+{% endfor %}
+</body>
+</html>

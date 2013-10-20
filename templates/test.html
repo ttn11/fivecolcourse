@@ -1,0 +1,28 @@
+<html>
+<head>
+ <script src="jquery.js"></script>
+ <script type="text/javascript">
+    window.onload = setupRefresh;
+    var test = "check 1";
+    function setupRefresh()
+    {
+        setInterval("refreshBlock();",5000);
+    }
+    
+    function refreshBlock()
+    {
+
+       $('#block1').load("test.html #block1");
+    }
+  </script>
+</head>
+  <body>
+  <h1>Good to stay</h1>
+            <div id="block1">some thing to reload
+            <script type="text/javascript">
+            document.write(test);
+            </script>
+            </div>
+            <div id="block2"></div>
+  </body>
+</html>

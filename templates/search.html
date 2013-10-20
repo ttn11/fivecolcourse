@@ -1,0 +1,159 @@
+<html>
+<head>
+<title>
+Five College Course Selector
+</title>
+<link rel="stylesheet" type="text/css" href="/static/search.css"/>
+<!--<script src="/static/jquery.js"></script>
+<!--<script type="text/javascript" src="/static/json2.js"></script>-->
+<script type="text/javascript">
+
+</script>
+
+</head>
+<body>
+{% if user %}
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36111761-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<script type="text/javascript">
+    function $(id){
+      return document.getElementById(id);
+    }
+    
+    function changeInfo(courseIn){
+        {% for course in courses %}
+            if (courseIn=='{{course.code}}{{course.section}}') {
+                    $('infotitle').innerHTML = "<center><b>{{course.name}}</b></center>"
+                    $('infonote').innerHTML = "<b><a href={{course.url}}>Link to course page in Five College website</a> </b>"
+                    $('infodescription').innerHTML = "<p>{{course.des}}</p><b>Note:</b><p>{{course.note}}</p>";
+                    $('infodescriptiontitle').innerHTML = "<b>Description:</b>";
+                    $('infoname').innerHTML = "<b>Major:</b> {{course.major}}</br><b>Code number:</b> {{course.code}}</br><b>Section:</b> {{course.section}}</br><b>Credits:</b> {{course.credit}}";
+                    $('infotime').innerHTML = "<b>Instructor:</b></br> {{course.instructor}}</br><b>Meeting time:</b></br>{{course.schedule}}</br><b>Location:</b></br>{{course.location}}"
+            }
+        {% endfor %}
+        $('infodescription').scrollTop = 0;
+    }
+
+    function add_remove_course(div_id,school,code,section){
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+          {// code for IE7+, Firefox, Chrome, Opera, Safari
+          xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {// code for IE6, IE5
+          xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+        var test="test";
+        xmlhttp.open("GET","/rpc?infor="+div_id+"&school="+school+"&code="+code+"&section="+section,true);
+        xmlhttp.send();
+        //xmlhttp.send("infor=test");
+        xmlhttp.onreadystatechange=function()
+          {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+            button = document.getElementById(div_id);
+            button.value = xmlhttp.responseText;
+            //document.write("olala go inside");
+            }
+          }
+    }
+    
+    function add_remove_course_show(div_id,school,code,section){
+        var xmlhttp1;
+        if (window.XMLHttpRequest)
+          {// code for IE7+, Firefox, Chrome, Opera, Safari
+          xmlhttp1=new XMLHttpRequest();
+          }
+        else
+          {// code for IE6, IE5
+          xmlhttp1=new ActiveXObject("Microsoft.XMLHTTP");
+          }
+        var test="test";
+        xmlhttp1.open("GET","/srpc?infor="+div_id+"&school="+school+"&code="+code+"&section="+section,true);
+        xmlhttp1.send();
+        //xmlhttp.send("infor=test");
+        xmlhttp1.onreadystatechange=function()
+          {
+          if (xmlhttp1.readyState==4 && xmlhttp1.status==200)
+            {
+            button = document.getElementById(div_id);
+            button.value = xmlhttp1.responseText;
+            //document.write("olala go inside");
+            }
+          }
+    }
+</script>
+{% for course in courses %}
+<script type="text/javascript">
+add_remove_course_show('{{account.id}}{{course.school}}{{course.code}}{{course.section}}','{{course.school}}','{{course.code}}','{{course.section}}');
+</script>
+{% endfor %}
+<center><h1><span id="brandfive"><a href="/">5ColCourse</a></span></h1></center>
+
+<div id="schedules"><a href="/schedule">My courses</a></div>
+<div id="schedule"><a href="/feedback">Feedback</a></div>
+<div id="schedule1"><a href={{logout_link}}>Log Out</a></div>
+<div id="scheduleh"><a href="/">Home</a></div>
+
+
+<div id="schools">
+<ul>
+{% for school in schools %}
+<li><a href="/?school={{school.name}}" onclick="changeMajor()">{{school.name}}</a></li>
+{% endfor %}
+</ul>
+</div>
+<div id="majors">
+<ul>
+{% for major in majors %}
+<li><a href="/?major={{major.name}}&school={{major.school}}" onclick="changeCourse()">{{major.name}}</a></li>
+{% endfor %}
+</ul>
+</div>
+<div id="courses">
+<ul>
+{% for course in courses %}
+<li>
+<div id="courseid" onclick="changeInfo('{{course.code}}{{course.section}}')"><input id="{{account.id}}{{course.school}}{{course.code}}{{course.section}}" type="button" onclick="add_remove_course('{{account.id}}{{course.school}}{{course.code}}{{course.section}}','{{course.school}}','{{course.code}}','{{course.section}}')" value="add" />{{course.name}}</div>
+</br>
+</li>
+{% endfor %}
+</ul>
+</div>
+<div id="infodescriptiontitle">
+</div>
+<div id="infodescription">
+</div>
+<div id="infotitle"></div>
+<div id="infonote"></div>
+<div id="infoname">
+</div>
+<div id="infotime">
+</div>
+
+<div id="footer" style="position:absolute; top:93%; left:37%;">Created By Thanh Nguyen 2012. All Rights Reserved.</div>
+{% endif %}
+
+{% if not user %}
+<center><h1><span id="brandfive"><a href="/">5ColCourse</a></span></h1></center>
+<center><div id="Notification">Hello. This is the open beta version of 5ColCourse web application, an application that will lets you look up all the courses from five colleges in one place, and picking up the courses that you like to store in your own profile and schedule. And it is absolutely <b>FREE</b> to use.</br> So lets start using it by <a href={{login_link}}>Logging in</a></div></center>
+
+<div id="footer" style="position:absolute; top:93%; left:37%;">Created By Thanh Nguyen 2012. All Rights Reserved.</div>
+{% endif %}
+
+</body>
+</html>
